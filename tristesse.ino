@@ -5,9 +5,7 @@ float tempo_rate = 60.0 / tempo;
 bool isPlaying = false; // 曲の再生状態を保持
 
 
-
-// sharp = lower  ex ) f4 = F#4;
-//本来は B4 E5 D#5 E4 F#4としたい
+//ここに楽譜を挿入。将来的に1小節ごとに巻き戻ししたいので、小節ごとに記載
 const char* musicData[] = {
   "B4_08",
   "E5_08 D#5_16 E5_16 F#5_04",
@@ -53,7 +51,7 @@ void loop(){
 void play_music() {
   delay(300); //曲初めの間
   for (int i = 0; i < sizeof(musicData) / sizeof(musicData[0]); i++) {
-    //強制終了 & 一時停止
+    //強制終了(S) & 一時停止(W)
     if(Serial.available()){
       char c = Serial.read();
       if (c == 'S'){
@@ -65,7 +63,7 @@ void play_music() {
         isPlaying = false;
       }
     }
-    //演奏可能か?(Wで演奏再開。Sで強制終了)
+    //(Wで演奏再開。Sで強制終了)
     if(!isPlaying){
       while(!isPlaying){
         if(Serial.available()){
@@ -78,7 +76,7 @@ void play_music() {
         }
       }
     }
-    //演奏
+    //Play
     play_music_data(musicData[i]);
     
     
@@ -103,11 +101,14 @@ void play_note(const char* note) {
   char noteName = note[0];
   int octave;
   int sharp = 0;
+  int duration;
+
+  // シャープ(D# -> d)
   if(note[1] == '#'){
     noteName = note[0] + 32;
     sharp = 1;
   }
-  int duration;
+
   //休符
   if(noteName == 'R'){
     duration = note[1] - '0';
@@ -117,14 +118,15 @@ void play_note(const char* note) {
     delay(noteDuration);
     return;
   }
+
   //音符
   if(note[3 + sharp] == '0'){
     duration = note[4 + sharp] - '0';
   }else{
     duration = (note[3 + sharp] - '0') * 10 + (note[4+sharp] - '0');
   }
-  octave = note[1 + sharp] - '0';
 
+  octave = note[1 + sharp] - '0';
   int frequency = calculate_frequency(noteName, octave); //周波数(音階)
   //Serial.println(frequency);
   int noteDuration = calculate_duration(duration); //音符の長さ
@@ -133,12 +135,14 @@ void play_note(const char* note) {
   delay(noteDuration); //再生と同じだけ待機
 }
 
+//周波数の計算
 int calculate_frequency(char note, int octave) {
   const char* notes = "CcDdEFfGgAaB";
   int noteIndex = strchr(notes, note) - notes; // ノーツのインデックスを計算
   return 261.626 * pow(2.0, (noteIndex + (octave - 4) * 12) / 12.0); //基準C4
 }
 
+//音符の長さを反映
 int calculate_duration(int duration) {
   switch (duration) {
     case 1: return 1000 * 4; //全音符
