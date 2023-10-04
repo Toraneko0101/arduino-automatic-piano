@@ -44,10 +44,8 @@ void loop(){
     char c = Serial.read();
     if (c == 'P') {
       // 'P'キーを受信した場合、曲の再生を開始
-      if (!isPlaying) {
-        isPlaying = true;
-        play_music(); // 曲を再生
-      }
+      isPlaying = true;
+      play_music(); // 曲を再生
     } 
   }
 }
@@ -85,7 +83,7 @@ void play_music() {
     
     
   }
-  delay(5000); //曲終わりの休息
+  delay(300); //曲終わりの休息
 }
 
 void play_music_data(const char* music) {
