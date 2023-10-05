@@ -42,6 +42,34 @@ analogWrite(pin, brightness)
             ・モータの速度
             ・音符の作成
 ```
+LEDの色
+```c++
+void setup()
+{
+  pinMode(11, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(9, OUTPUT);
+}
+
+void loop()
+{
+  analogWrite(11, 0);
+  analogWrite(10, 0);
+  analogWrite(9, 0);
+  delay(1000); // Wait for 1000 millisecond(s)
+  for (int i=0; i<=255; i+=50){
+    for (int j=0; j<=255; j+=50){
+        for (int k=0; k<=255; k+=50){
+            analogWrite(11, i);
+            analogWrite(10, j);
+            analogWrite(9, k);
+            delay(100);
+        } 
+    }
+  }
+  delay(1000); // Wait for 1000 millisecond(s)
+}
+```
 
 ## その他
 __GND__
@@ -60,4 +88,6 @@ __ダメな回路図__
 
 __内部プルアップ抵抗__
 - 電源の陽極とピンをつなぎ、デフォルトを5Vにしている
+- スイッチが入れば、電流はGNDの方に流れる
+  - ピンはGNDより電位が高いので 
 ![](./images/circuit2.svg)
