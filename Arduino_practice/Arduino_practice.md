@@ -22,6 +22,7 @@ __digitalRead__
 ```text
 digitalRead(pin)
     pin : ピンがHIGHかLOWか読み取る
+    return : int(HIGH or LOW)
 ```
 __analogWrite__
 ```text
@@ -71,6 +72,38 @@ void loop()
 }
 ```
 
+__analogRead__
+```text
+analogRead(pin)
+  pin: アナログ入力ピンの番号 ex) A0
+  return: int (Unoの場合、0 ~ 1023)
+
+```
+
+__Serial.begin__
+```text
+Serial.begin(spped)
+  speed: シリアル通信のデータ転送レート(bps)
+```
+
+__Serial.println__
+```text
+Serial.print() //改行無し
+Serial.println() //改行あり
+  シリアルモニタに出力を送信
+```
+
+__map__
+```text
+map(sensorVal, from_min, from_max, to_min, to_max)
+  sensorVal: センサで読み取られる値
+  from_min : 予測される最小値
+  from_max : 予測される最大値
+  to_min : 希望する最小値
+  to_max : 希望する最大値
+  例) map(20, 0, 1023, 0, 255) 0~1023までの値を、0~255までの値にスケールダウンする
+```
+
 ## その他
 __GND__
 ```text
@@ -91,3 +124,28 @@ __内部プルアップ抵抗__
 - スイッチが入れば、電流はGNDの方に流れる
   - ピンはGNDより電位が高いので 
 ![](./images/circuit2.svg)
+
+__ポテンショメーター__
+```text
+・回転角を計測し、電圧に変換する
+・アナログ入力を利用
+```
+
+__フォトレジスタ__
+```text
+・光の強さで、抵抗値を変化させる
+・光が当たると抵抗値が下がる
+・抵抗値を電圧に変換し、analogReadで読み取る
+・アナログ入力を利用
+```
+
+__PIR(Passive InfraRed)__
+```text
+・物体から放出される遠赤外線の変化を検出する
+・デフォルトはLOWで、光レベルが変化すると一定時間HIGHになる
+```
+
+__温度センサ(TMP36)__
+```text
+出力電圧が温度（摂氏）に比例する
+```
