@@ -3,6 +3,7 @@
 Tristesse(別れの曲)
 
 - Tinkercadで動作確認済み
+- https://www.tinkercad.com/things/2HiKPZpuBa1-automaticpianotristesse
 
 ## 現状
 
